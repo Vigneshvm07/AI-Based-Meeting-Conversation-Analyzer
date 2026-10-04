@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeetMind | AI Meeting Conversation Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header class="navbar">
+    <div class="container nav-inner">
+        <div class="logo">
+            <div class="logo-icon">✦</div>
+            <span>MeetMind</span>
+        </div>
+
+        <nav>
+            <a href="#analyzer">Analyzer</a>
+            <a href="#dashboard">Dashboard</a>
+            <a href="#insights">Insights</a>
+            <a href="#workflow">How It Works</a>
+        </nav>
+
+        <button class="nav-btn" onclick="scrollToAnalyzer()">Analyze Meeting</button>
+    </div>
+</header>
+
+<main>
+
+<section class="hero">
+    <div class="container hero-grid">
+
+        <div class="hero-content">
+            <div class="badge">
+                <span>●</span> AI-Powered Conversation Intelligence
+            </div>
+
+            <h1>Turn Every Meeting Into <span>Actionable Insights.</span></h1>
+
+            <p>
+                Analyze meeting conversations using AI-powered text analysis
+                to understand sentiment, participation, communication quality,
+                topics, and key decisions.
+            </p>
+
+            <div class="hero-buttons">
+                <button class="btn primary" onclick="scrollToAnalyzer()">
+                    Start Analysis →
+                </button>
+                <button class="btn secondary" onclick="loadDemo()">
+                    Try Demo
+                </button>
+            </div>
+
+            <div class="trust-row">
+                <span>✓ Sentiment Analysis</span>
+                <span>✓ Topic Detection</span>
+                <span>✓ Action Items</span>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="visual-card">
+                <div class="visual-header">
+                    <span>Meeting Intelligence</span>
+                    <span class="live">● LIVE</span>
+                </div>
+
+                <div class="wave">
+                    <span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span>
+                </div>
+
+                <div class="score-box">
+                    <div>
+                        <small>Meeting Score</small>
+                        <strong>91<span>/100</span></strong>
+                    </div>
+                    <div class="score-circle">91%</div>
+                </div>
+
+                <div class="mini-grid">
+                    <div>
+                        <small>Sentiment</small>
+                        <strong>Positive</strong>
+                    </div>
+                    <div>
+                        <small>Participation</small>
+                        <strong>84%</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="float-card one">
+                <span>😊</span>
+                <div>
+                    <small>Sentiment</small>
+                    <b>Positive</b>
+                </div>
+            </div>
+
+            <div class="float-card two">
+                <span>✓</span>
+                <div>
+                    <small>Action Items</small>
+                    <b>08 Detected</b>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="analyzer section" id="analyzer">
+    <div class="container">
+
+        <div class="section-heading">
+            <div class="section-label">AI ANALYZER</div>
+            <h2>Analyze Your Meeting Conversation</h2>
+            <p>Paste a meeting transcript below and let MeetMind identify important conversation patterns.</p>
+        </div>
+
+        <div class="analyzer-grid">
+
+            <div class="input-card">
+                <div class="card-top">
+                    <div>
+                        <h3>Meeting Transcript</h3>
+                        <p>Enter or paste your conversation</p>
+                    </div>
+                    <button class="demo-btn" onclick="loadDemo()">Load Demo</button>
+                </div>
+
+                <textarea id="transcript" placeholder="Example:
+Sarah: Good morning everyone. Let's discuss the project deadline.
+John: I think we can complete the development by Friday.
+Sarah: Great. Please make sure the testing is completed before deployment.
+Mike: I will prepare the testing report and share it tomorrow.
+Sarah: Perfect. Let's schedule another review meeting next week."></textarea>
+
+                <div class="input-footer">
+                    <span id="wordCount">0 words</span>
+                    <button class="analyze-btn" onclick="analyzeMeeting()">Analyze Conversation ✦</button>
+                </div>
+            </div>
+
+            <div class="result-card">
+
+                <div class="result-top">
+                    <div>
+                        <h3>AI Analysis</h3>
+                        <p>Conversation intelligence results</p>
+                    </div>
+                    <div class="status-pill" id="statusPill">Ready</div>
+                </div>
+
+                <div class="overall-score">
+                    <div class="score-ring" id="scoreRing">
+                        <div>
+                            <strong id="overallScore">--</strong>
+                            <span>/100</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 id="qualityTitle">Waiting for analysis</h4>
+                        <p id="qualityText">Enter a meeting transcript to generate AI insights.</p>
+                    </div>
+                </div>
+
+                <div class="metrics">
+
+                    <div class="metric">
+                        <div class="metric-icon purple">😊</div>
+                        <div class="metric-info">
+                            <span>Sentiment</span>
+                            <strong id="sentimentValue">--</strong>
+                        </div>
+                    </div>
+
+                    <div class="metric">
+                        <div class="metric-icon blue">👥</div>
+                        <div class="metric-info">
+                            <span>Participation</span>
+                            <strong id="participationValue">--</strong>
+                        </div>
+                    </div>
+
+                    <div class="metric">
+                        <div class="metric-icon green">💬</div>
+                        <div class="metric-info">
+                            <span>Communication</span>
+                            <strong id="communicationValue">--</strong>
+                        </div>
+                    </div>
+
+                    <div class="metric">
+                        <div class="metric-icon orange">🎯</div>
+                        <div class="metric-info">
+                            <span>Engagement</span>
+                            <strong id="engagementValue">--</strong>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="dashboard section" id="dashboard">
+    <div class="container">
+
+        <div class="section-heading">
+            <div class="section-label">MEETING DASHBOARD</div>
+            <h2>Conversation Performance</h2>
+            <p>Monitor meeting quality and communication patterns.</p>
+        </div>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-icon purple">📅</div>
+                <span>Total Meetings</span>
+                <strong>128</strong>
+                <small>+12% this month</small>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon green">★</div>
+                <span>Average Score</span>
+                <strong>86%</strong>
+                <small>+7% improvement</small>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon blue">😊</div>
+                <span>Positive Meetings</span>
+                <strong>94</strong>
+                <small>73% of meetings</small>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon orange">✓</div>
+                <span>Action Items</span>
+                <strong>346</strong>
+                <small>Identified automatically</small>
+            </div>
+
+        </div>
+
+        <div class="charts-grid">
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <h3>Meeting Quality Trend</h3>
+                        <p>Average quality score over recent meetings</p>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="qualityChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <h3>Meeting Sentiment</h3>
+                        <p>Overall conversation sentiment</p>
+                    </div>
+                </div>
+                <div class="chart-container doughnut">
+                    <canvas id="sentimentChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="insights section" id="insights">
+    <div class="container">
+
+        <div class="section-heading">
+            <div class="section-label">AI INSIGHTS</div>
+            <h2>Understand What Happened</h2>
+            <p>MeetMind transforms raw conversations into meaningful information.</p>
+        </div>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+                <div class="feature-icon">😊</div>
+                <h3>Sentiment Analysis</h3>
+                <p>Detect positive, negative, and neutral emotions throughout the meeting.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🗣️</div>
+                <h3>Speaker Participation</h3>
+                <p>Identify participation patterns and estimate how actively people contribute.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🏷️</div>
+                <h3>Topic Detection</h3>
+                <p>Discover the important topics and subjects discussed during the meeting.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">✓</div>
+                <h3>Action Items</h3>
+                <p>Automatically identify tasks, responsibilities, and follow-up activities.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💡</div>
+                <h3>Key Decisions</h3>
+                <p>Highlight important decisions and conclusions made during conversations.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Meeting Score</h3>
+                <p>Generate an overall score based on communication, engagement, and sentiment.</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="workflow section" id="workflow">
+    <div class="container">
+
+        <div class="section-heading">
+            <div class="section-label">HOW IT WORKS</div>
+            <h2>From Conversation to Intelligence</h2>
+        </div>
+
+        <div class="workflow-grid">
+
+            <div class="workflow-step">
+                <div class="step-number">01</div>
+                <div class="step-icon">🎙️</div>
+                <h3>Conversation Input</h3>
+                <p>Meeting transcript or speech-to-text data enters the system.</p>
+            </div>
+
+            <div class="workflow-line"></div>
+
+            <div class="workflow-step">
+                <div class="step-number">02</div>
+                <div class="step-icon">⚙️</div>
+                <h3>NLP Processing</h3>
+                <p>Natural Language Processing cleans and analyzes the conversation.</p>
+            </div>
+
+            <div class="workflow-line"></div>
+
+            <div class="workflow-step">
+                <div class="step-number">03</div>
+                <div class="step-icon">🧠</div>
+                <h3>AI Analysis</h3>
+                <p>AI evaluates sentiment, topics, engagement, and communication.</p>
+            </div>
+
+            <div class="workflow-line"></div>
+
+            <div class="workflow-step">
+                <div class="step-number">04</div>
+                <div class="step-icon">📈</div>
+                <h3>Smart Insights</h3>
+                <p>Results are converted into useful summaries and recommendations.</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <div class="container cta-inner">
+        <div>
+            <div class="section-label">MEETING INTELLIGENCE</div>
+            <h2>Make Every Conversation Count.</h2>
+            <p>Use AI to discover what your meetings are really saying.</p>
+        </div>
+
+        <button class="btn white" onclick="scrollToAnalyzer()">Analyze a Meeting →</button>
+    </div>
+</section>
+
+</main>
+
+<footer>
+    <div class="container footer-inner">
+        <div class="logo">
+            <div class="logo-icon">✦</div>
+            <span>MeetMind</span>
+        </div>
+        <p>AI-Based Meeting Conversation Analyzer</p>
+        <span>© 2026 MeetMind</span>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
